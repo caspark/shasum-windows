@@ -1,0 +1,9 @@
+[package]
+name = "shasum-windows"
+version = "0.1.0"
+authors = ["Caspar Krieger <git@asparck.com>"]
+edition = "2018"
+
+[dependencies]
+sha-1 = "0.8.2"
+walkdir = "2.3.1"
