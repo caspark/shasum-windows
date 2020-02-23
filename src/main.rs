@@ -1,7 +1,11 @@
-use sha1::{Sha1, Digest};
+use sha1::{Digest, Sha1};
+use std::{env, fs, io};
 use walkdir::WalkDir;
-use std::{fs, io, env};
 
+/// Get the filename of an entry from a directory walk, with backslashes replaced with forward slashes
+fn unixy_filename_of(entry: walkdir::DirEntry) -> String {
+    return entry.path().display().to_string().replace("\\", "/");
+}
 
 fn main() {
     let args: Vec<_> = env::args().collect();
@@ -15,11 +19,23 @@ fn main() {
     for entry in WalkDir::new(root).same_file_system(true) {
         let entry = entry.expect("able to read file");
         if entry.file_type().is_file() {
-            let mut file = fs::File::open(entry.path()).expect("should be able to open file");
-            let mut hasher = Sha1::new();
-            io::copy(&mut file, &mut hasher).expect("io copying should work");
-            let result = hasher.result();
-            println!("{hash:x}  {file}", hash=result, file=entry.path().display().to_string().replace("\\", "/"));
+            match fs::File::open(entry.path()) {
+                Ok(mut file) => {
+                    let mut hasher = Sha1::new();
+                    io::copy(&mut file, &mut hasher).expect("io copying should work");
+                    let result = hasher.result();
+                    println!(
+                        "{hash:x}  {file}",
+                        hash = result,
+                        file = unixy_filename_of(entry)
+                    );
+                }
+                Err(err) => println!(
+                    "Error:{err:?}  {file}",
+                    err = err,
+                    file = unixy_filename_of(entry)
+                ),
+            }
         }
     }
 }
