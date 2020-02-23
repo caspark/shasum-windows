@@ -13,7 +13,7 @@ The output of `shasum-windows.exe foo` is equivalent to `find foo -type f -exec 
 ## Installation & usage
 
 1. Install Rust from http://rustup.rs/
-2. Run `cargo install --git git@github.com:caspark/shasum-windows.git`
+2. Run `cargo install --git https://github.com/caspark/shasum-windows.git`
 3. Run `shasum-windows directory-of-your-choice`
 
 ## Example usage
