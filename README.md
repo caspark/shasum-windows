@@ -29,7 +29,9 @@ a0d3eb93719724c76b3d43740a103eac52887dc1  c:/temp/test/subdir/counts-2018-11.xml
 
 ## Known issues
 
-* Files whose paths are longer than 260 characters will fail to be read unless you [have enabled long paths support in Windows](https://www.howtogeek.com/266621/how-to-make-windows-10-accept-file-paths-over-260-characters/) (e.g. via the `Enable Win32 long paths` group policy setting). If long paths support is enabled then shasum-windows will opt into supporting long paths via its application manifest (see `build.rs`) this won't be an issue. See also https://github.com/rust-lang/rfcs/pull/2188 for native long path support in Rust.
+* Files whose paths are longer than 260 characters will fail to be read unless you [have enabled long paths support in Windows](https://www.howtogeek.com/266621/how-to-make-windows-10-accept-file-paths-over-260-characters/) (e.g. via the `Enable Win32 long paths` group policy setting).
+  * If long paths support is enabled then shasum-windows will opt into supporting long paths via its application manifest (see `build.rs`) and this won't be a problem.
+  * See also https://github.com/rust-lang/rfcs/pull/2188 for native long path support in Rust.
 
 ## See also
 
