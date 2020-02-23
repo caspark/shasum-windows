@@ -1,9 +1,10 @@
 use sha1::{Digest, Sha1};
+use std::borrow::Cow;
 use std::{env, fs, io};
 use walkdir::WalkDir;
 
 /// Get the filename of an entry from a directory walk, with backslashes replaced with forward slashes
-fn unixy_filename_of(entry: walkdir::DirEntry) -> String {
+fn unixy_filename_of(entry: &walkdir::DirEntry) -> String {
     return entry.path().display().to_string().replace("\\", "/");
 }
 
@@ -25,16 +26,27 @@ fn main() {
                     io::copy(&mut file, &mut hasher).expect("io copying should work");
                     let result = hasher.result();
                     println!(
-                        "{hash:x}  {file}",
+                        "{hash:x}  {path}",
                         hash = result,
-                        file = unixy_filename_of(entry)
+                        path = unixy_filename_of(&entry)
                     );
                 }
-                Err(err) => println!(
-                    "Error:{err:?}  {file}",
-                    err = err,
-                    file = unixy_filename_of(entry)
-                ),
+                Err(err) => {
+                    let path = unixy_filename_of(&entry);
+
+                    let tip = if path.len() > 260 {
+                        // path is longer than normal windows limit - long path support might need to be enabled
+                        Some(Cow::from(format!("NB: path length of {len} is greater than 260 limit; you might need to enable the 'Enable Win32 long paths' group policy setting", len = path.len())))
+                    } else {
+                        None
+                    };
+                    println!(
+                        "Error:{err:?}{tip}  {path}",
+                        err = err,
+                        tip = tip.unwrap_or(Cow::from("")),
+                        path = &path
+                    )
+                }
             }
         }
     }

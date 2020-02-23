@@ -27,6 +27,10 @@ a0d3eb93719724c76b3d43740a103eac52887dc1  c:/temp/test/subdir/counts-2018-11.xml
 1ac2e5d72e99d7e237a9af2a7117a44ed1262643  c:/temp/test/subdir/counts-2018-12.xml
 ```
 
+## Known issues
+
+* Files whose paths are longer than 260 characters will fail to be read unless you [have enabled long paths support in Windows](https://www.howtogeek.com/266621/how-to-make-windows-10-accept-file-paths-over-260-characters/) (e.g. via the `Enable Win32 long paths` group policy setting). If long paths support is enabled then shasum-windows will opt into supporting long paths via its application manifest (see `build.rs`) this won't be an issue. See also https://github.com/rust-lang/rfcs/pull/2188 for native long path support in Rust.
+
 ## See also
 
 * https://github.com/idrassi/DirHash - a fancier implementation, but crashes when it encounters a directory junction.
